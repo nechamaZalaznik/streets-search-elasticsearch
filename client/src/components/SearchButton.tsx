@@ -1,32 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearch } from '../context/SearchContext';
-import { MOCK_STREETS } from '../mocks/streetsMock';
-
+import { searchStreets } from '../services/api';
 
 const SearchButton: React.FC = () => {
   const { searchQuery, setSearchQuery, searchMode, setResults } = useSearch();
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
-    console.log(`מבצע חיפוש עבור: "${searchQuery}" בסוג חיפוש: ${searchMode}`);
-    setResults(MOCK_STREETS);
-    setSearchQuery('');
+    setLoading(true);
+    try {
+      const data = await searchStreets(searchQuery, searchMode);
+      setResults(data);
+      // הערה: בתרגילים בדרך כלל לא מנקים את ה-query מיד כדי שהמשתמש יראה מה הוא חיפש
+    } catch (error) {
+      alert("שגיאה בחיבור לשרת");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <button
+      className={`search-button ${searchQuery.trim() === '' ? 'disabled' : ''}`}
       onClick={handleSearch}
-      disabled={searchQuery.trim() === ''}
-      style={{
-        padding: '10px 20px',
-        backgroundColor: searchQuery.trim() === '' ? '#ccc' : '#007bff', 
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: searchQuery.trim() === '' ? 'not-allowed' : 'pointer',
-        fontSize: '16px'
-      }}
+      disabled={searchQuery.trim() === '' || loading}
     >
-      חיפוש
+      {loading ? 'מחפש...' : 'חיפוש'}
     </button>
   );
 };

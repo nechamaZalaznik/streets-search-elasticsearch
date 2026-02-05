@@ -34,7 +34,21 @@ export const phraseSearchInElastic = async (q: string): Promise<any> => {
     index: INDEX_NAME,
     query: {
       bool: {
-        must: [{ multi_match: { query: q, fields: ['*'], type: 'phrase' } }],
+        must: [
+          {
+            multi_match: {
+              query: q,
+              // התיקון: פנייה ספציפית לתתי-השדות מסוג keyword
+              // אלסטיק יוצר אותם אוטומטית לכל שדה טקסט אם לא הגדרת אחרת
+              fields: [
+                'street_name.keyword',
+                'neighborhood.keyword',
+                'secondary_name.keyword'
+              ],
+              type: 'phrase'
+            }
+          }
+        ],
         filter: [{ term: { is_active: true } }]
       }
     }
