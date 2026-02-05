@@ -1,39 +1,22 @@
 import express from 'express';
 import cors from 'cors';
-import { Client } from '@elastic/elasticsearch';
 import dotenv from 'dotenv';
+import searchRoutes from './routes/searchRoutes.js';
+import streetManagementRoutes from './routes/streetManagementRoutes.js';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
-const elasticNode = process.env.ELASTIC_NODE;
+// כל מה שקשור לחיפושים (free, words, phrase)
+app.use('/api/search', searchRoutes);
 
-if (!elasticNode) {
-  throw new Error('ELASTIC_NODE is not defined in environment variables');
-}
-
-const client = new Client({
-  node: elasticNode,
-  auth: {
-    apiKey: process.env.ELASTIC_API_KEY || ''
-  }
-});
-
-// בדיקת חיבור בסיסית
-app.get('/health', async (req, res) => {
-  try {
-    await client.ping();
-    res.send({ status: 'OK', message: 'Connected to Elasticsearch' });
-  } catch (error) {
-    res.status(500).send({ status: 'Error', error });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// כל מה שקשור לניהול רחובות (כרגע רק מחיקה)
+app.use('/api/streets', streetManagementRoutes);
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

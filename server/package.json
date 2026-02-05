@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-esm src/index.ts",
-    "dev": "nodemon --exec ts-node-esm src/index.ts",
+    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
     "ingest": "ts-node-esm src/scripts/ingest.ts"
   },
   "keywords": [],
