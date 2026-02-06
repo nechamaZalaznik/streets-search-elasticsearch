@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { useSearch } from '../context/SearchContext';
-import { searchStreets } from '../services/api';
+import { useSearch } from '../../context/SearchContext';
+import { searchStreets } from '../../services/api';
+import styles from './SearchButton.module.scss';
 
 const SearchButton: React.FC = () => {
   const { searchQuery, setSearchQuery, searchMode, setResults } = useSearch();
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+
     setLoading(true);
     try {
       const data = await searchStreets(searchQuery, searchMode);
       setResults(data);
-      // הערה: בתרגילים בדרך כלל לא מנקים את ה-query מיד כדי שהמשתמש יראה מה הוא חיפש
     } catch (error) {
       alert("שגיאה בחיבור לשרת");
       console.error(error);
@@ -20,11 +22,13 @@ const SearchButton: React.FC = () => {
     }
   };
 
+  const isDisabled = searchQuery.trim() === '' || loading;
+
   return (
     <button
-      className={`search-button ${searchQuery.trim() === '' ? 'disabled' : ''}`}
       onClick={handleSearch}
-      disabled={searchQuery.trim() === '' || loading}
+      disabled={isDisabled}
+      className={`${styles.searchButton} ${isDisabled ? styles.disabled : ''}`}
     >
       {loading ? 'מחפש...' : 'חיפוש'}
     </button>

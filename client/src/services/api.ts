@@ -6,7 +6,6 @@ import type { Street } from '../types/street';
 const API_BASE_URL = 'http://localhost:3001/api';
 
 export const searchStreets = async (query: string, mode: SearchMode): Promise<Street[]> => {
-  // מיפוי בין ה-Mode של הריאקט ל-Route של הבקנד
   const modeToRoute = {
     'FREE': 'search/free',
     'EXACT': 'search/words',

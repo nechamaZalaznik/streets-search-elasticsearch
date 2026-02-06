@@ -1,0 +1,36 @@
+@use '../../_variables' as var;
+
+.row {
+  border-bottom: 1px solid var.$border-color; 
+  transition: all 0.2s ease; 
+  border-right: 4px solid transparent; 
+
+  td {
+    padding: 12px 25px; 
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap; 
+    color: #333;         
+    font-size: 14px;
+  }
+
+  .deleteCell {
+    padding: 0;         
+    width: 60px;        
+    background-color: transparent; 
+    border-right: 1px solid var.$border-color; 
+  }
+
+  &:hover {
+    background-color: rgba(0, 86, 179, 0.05); 
+    border-right: 4px solid var.$primary-blue; 
+  }
+
+  &:nth-child(even) {
+    background-color: #fafafa;
+    
+    &:hover { 
+      background-color: rgba(0, 86, 179, 0.05); 
+    }
+  }
+}

@@ -1,5 +1,5 @@
 export interface Street {
-  id: string;             // שימי לב: בלי קו תחתון, כי ככה זה חזר בפוסטמן
+  id: string;    
   street_name: string;
   title?: string;
   secondary_name?: string;

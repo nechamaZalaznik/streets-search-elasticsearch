@@ -1,0 +1,30 @@
+@use '../../_variables' as var;
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto; 
+  margin-top: 20px;
+  direction: rtl;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse; 
+  background-color: var.$white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+}
+
+.headerRow {
+  background-color: var.$primary-blue; 
+  border-bottom: 2px solid var.$hover-blue;
+
+  th {
+    padding: 15px 25px; 
+    text-align: right;
+    font-weight: 600;
+    color: var.$white; 
+    font-size: 14px;
+    white-space: nowrap;
+    letter-spacing: 0.5px; 
+  }
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './DeleteButton.module.scss';
 
 interface DeleteButtonProps {
   onDelete: () => void;
@@ -7,16 +8,8 @@ interface DeleteButtonProps {
 const DeleteButton: React.FC<DeleteButtonProps> = ({ onDelete }) => {
   return (
     <button 
+      className={styles.deleteButton}
       onClick={onDelete}
-      style={{
-        backgroundColor: 'red',
-        color: 'white',
-        border: '1px solid black',
-        width: '100%',
-        height: '100%',
-        cursor: 'pointer',
-        fontWeight: 'bold'
-      }}
     >
       מחק
     </button>
