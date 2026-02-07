@@ -1,28 +1,46 @@
 import type { Request, Response } from 'express';
-import * as searchService from '../services/searchService.js';
+import { searchService } from '../services/index.js'; 
 
-/**
- * Extracts the source data from Elasticsearch hits for a cleaner API response
- */
-const formatResults = (result: any) => result.hits.hits.map((hit: any) => ({
-  id: hit._id,
-  ...hit._source
-}));
+export class SearchController {
+  
 
-export const freeSearch = async (req: Request, res: Response) => {
-  const q = req.query.q as string;
-  const result = await searchService.freeSearchInElastic(q || '');
-  res.json(formatResults(result));
-};
+  private formatResults(result: any) {
+    return result.hits.hits.map((hit: any) => ({
+      id: hit._id,
+      ...hit._source
+    }));
+  }
 
-export const fullWordsSearch = async (req: Request, res: Response) => {
-  const q = req.query.q as string;
-  const result = await searchService.fullWordsSearchInElastic(q || '');
-  res.json(formatResults(result));
-};
+  freeSearch = async (req: Request, res: Response) => {
+    try {
+      const q = (req.query.q as string) || '';
+      const result = await searchService.freeSearchInElastic(q);
+      res.json(this.formatResults(result));
+    } catch (error) {
+      res.status(500).json({ error: 'Free search failed' });
+    }
+  };
 
-export const phraseSearch = async (req: Request, res: Response) => {
-  const q = req.query.q as string;
-  const result = await searchService.phraseSearchInElastic(q || '');
-  res.json(formatResults(result));
-};
+  fullWordsSearch = async (req: Request, res: Response) => {
+    try {
+      const q = (req.query.q as string) || '';
+      const result = await searchService.fullWordsSearchInElastic(q);
+      res.json(this.formatResults(result));
+    } catch (error) {
+      res.status(500).json({ error: 'Full words search failed' });
+    }
+  };
+
+ 
+  phraseSearch = async (req: Request, res: Response) => {
+    try {
+      const q = (req.query.q as string) || '';
+      const result = await searchService.phraseSearchInElastic(q);
+      res.json(this.formatResults(result));
+    } catch (error) {
+      res.status(500).json({ error: 'Phrase search failed' });
+    }
+  };
+}
+
+export const searchController = new SearchController();

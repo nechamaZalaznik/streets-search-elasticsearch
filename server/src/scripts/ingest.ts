@@ -1,84 +1,89 @@
+import { Client } from '@elastic/elasticsearch';
+import csv from 'csv-parser';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import csv from 'csv-parser';
-import { Client } from '@elastic/elasticsearch';
-import dotenv from 'dotenv';
+import { config } from '../config/index.js';
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Elasticsearch client for ingestion
 const client = new Client({
-  node: process.env.ELASTIC_NODE!,
-  auth: { apiKey: process.env.ELASTIC_API_KEY || '' }
+  node: config.elastic.node,
+  auth: { apiKey: config.elastic.apiKey }
 });
 
 const INDEX_NAME = 'beersheba_streets';
 const CSV_PATH = path.join(__dirname, '../../data/streets.csv');
+const BATCH_SIZE = 500; 
 
 interface CsvRow {
   [key: string]: string | undefined;
 }
 
-/**
- * Main ingestion script: 
- * Reads street data from a CSV file, maps it to a JSON structure, 
- * and performs a Bulk upload to Elasticsearch.
- */
-async function runIngestion() {
-  const streets: any[] = [];
-  console.log('--- Starting Ingestion Process (UTF-8) ---');
+async function processBatch(data: any[]) {
+  try {
+    const operations = data.flatMap(doc => [
+      { index: { _index: INDEX_NAME } },
+      doc
+    ]);
 
-  // Verify file existence before starting the stream
+    const bulkResponse = await client.bulk({ refresh: true, operations });
+    
+    if (bulkResponse.errors) {
+      console.error('Errors occurred in bulk operation');
+    } else {
+      console.log(`Successfully indexed ${data.length} documents.`);
+    }
+  } catch (error) {
+    console.error('Failed to process batch:', error);
+  }
+}
+
+async function runIngestion() {
+  let batch: any[] = [];
+  console.log('--- Starting Optimized Ingestion Process (UTF-8) ---');
+
   if (!fs.existsSync(CSV_PATH)) {
     console.error(`Error: CSV file not found at ${CSV_PATH}`);
     return;
   }
 
-  // Stream the CSV file to handle memory efficiency for large datasets
-  fs.createReadStream(CSV_PATH)
-    .pipe(csv())
-    .on('data', (row: CsvRow) => {
-      // Mapping Hebrew CSV columns to structured JSON documents
-      streets.push({
-        street_name: row['שם ראשי'],
-        title: row['תואר'],
-        secondary_name: row['שם מישני'], 
-        street_type: row['סוג'],
-        neighborhood: row['שכונה'],
-        ID_street: row['קוד'],
-        is_active: true // Initializing status for the soft-delete logic
-      });
-    })
-    .on('end', async () => {
-      if (streets.length > 0) {
-        console.log('Sample data (Verify Hebrew encoding):', streets[0]);
-      }
+  const stream = fs.createReadStream(CSV_PATH).pipe(csv());
 
-      try {
-        /**
-         * Prepare operations for the Bulk API.
-         * The structure requires an action object followed by the document itself.
-         */
-        const operations = streets.flatMap(doc => [
-          { index: { _index: INDEX_NAME } },
-          doc
-        ]);
-
-        const bulkResponse = await client.bulk({ refresh: true, operations });
-
-        if (bulkResponse.errors) {
-          console.error('Bulk errors occurred during ingestion.');
-        } else {
-          console.log(`✅ Success! Indexed ${streets.length} documents into ${INDEX_NAME}`);
-        }
-      } catch (error) {
-        console.error('❌ Ingestion Failed:', error);
-      }
+  stream.on('data', async (row: CsvRow) => {
+    batch.push({
+      street_name: row['שם ראשי'],
+      title: row['תואר'],
+      secondary_name: row['שם מישני'],
+      street_type: row['סוג'],
+      neighborhood: row['שכונה'],
+      ID_street: row['קוד'],
+      is_active: true
     });
+
+    if (batch.length >= BATCH_SIZE) {
+      stream.pause();
+      const currentBatch = [...batch];
+      batch = [];
+      await processBatch(currentBatch);
+      stream.resume();
+    }
+  });
+
+  stream.on('end', async () => {
+    if (batch.length > 0) {
+      await processBatch(batch);
+    }
+    console.log('✅ Ingestion completed successfully!');
+  });
+
+  stream.on('error', (error) => {
+    console.error('❌ Stream error:', error);
+  });
 }
 
 runIngestion();

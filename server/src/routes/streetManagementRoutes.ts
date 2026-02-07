@@ -1,6 +1,8 @@
 import { Router } from "express";
-import * as streetController from "../controllers/streetController.js";
+import { streetManagementController } from "../controllers/index.js";
 
 const router = Router();
-router.delete('/:id', streetController.deleteStreet);
-export default router;
+
+router.delete('/:id', streetManagementController.deleteStreet);
+
+export const streetManagementRouter = router;
