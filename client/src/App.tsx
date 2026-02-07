@@ -16,7 +16,6 @@ function App() {
         </header>
 
         <main className={styles.mainContent}>
-          {/* אזור החיפוש המאוגד */}
           <section className={styles.searchSection}>
             <div className={styles.searchControls}>
               <SearchBar />
@@ -25,7 +24,6 @@ function App() {
             </div>
           </section>
 
-          {/* אזור התוצאות */}
           <section className={styles.resultsSection}>
             <ResultsTable />
           </section>

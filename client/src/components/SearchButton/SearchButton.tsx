@@ -4,7 +4,7 @@ import { searchStreets } from '../../services/api';
 import styles from './SearchButton.module.scss';
 
 const SearchButton: React.FC = () => {
-  const { searchQuery, setSearchQuery, searchMode, setResults } = useSearch();
+  const { searchQuery, searchMode, setResults } = useSearch();
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {

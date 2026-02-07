@@ -18,6 +18,7 @@ const ResultsTable: React.FC = () => {
     }
   };
 
+  // Do not render the table if there are no search results
   if (results.length === 0) return null;
 
   return (

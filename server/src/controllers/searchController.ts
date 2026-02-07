@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
 import * as searchService from '../services/searchService.js';
 
-// פונקציית עזר לעיבוד תוצאות
+/**
+ * Extracts the source data from Elasticsearch hits for a cleaner API response
+ */
 const formatResults = (result: any) => result.hits.hits.map((hit: any) => ({
   id: hit._id,
   ...hit._source

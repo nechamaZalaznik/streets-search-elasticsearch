@@ -1,8 +1,8 @@
 import { elasticClient } from '../lib/elasticsearch.js';
 
-
 /**
- * מעדכן רחוב למצב לא פעיל (מחיקה לוגית)
+ * Updates the document's 'is_active' field to false.
+ * Using the Update API instead of Delete to maintain data history.
  */
 export const deleteStreetInElastic = async (id: string): Promise<any> => {
   return await elasticClient.update({

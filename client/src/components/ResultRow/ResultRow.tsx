@@ -18,7 +18,6 @@ const ResultRow: React.FC<ResultRowProps> = ({ street, onDeleteRow }) => {
       <td>{street.street_type}</td>
       <td>{street.ID_street}</td>
       
-      {/* תא המחיקה */}
       <td className={styles.deleteCell}>
         <DeleteButton onDelete={() => onDeleteRow(street.id)} />
       </td>

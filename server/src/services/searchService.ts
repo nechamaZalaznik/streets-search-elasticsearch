@@ -2,20 +2,20 @@ import { elasticClient } from '../lib/elasticsearch.js';
 
 const INDEX_NAME = 'beersheba_streets';
 
-// 1. חיפוש חופשי - חצאי מילים - רק בשם הרחוב
+// Partial match search using wildcards (Note: lower performance on large datasets)
 export const freeSearchInElastic = async (q: string): Promise<any> => {
     return await elasticClient.search({
         index: INDEX_NAME,
         query: {
             bool: {
                 must: [{ wildcard: { street_name: { value: `*${q}*` } } }],
-                filter: [{ term: { is_active: true } }]
+                filter: [{ term: { is_active: true } }] // Only active records
             }
         }
     });
 };
 
-// 2. מילים מלאות - בכל השדות
+// Full word matches across all fields using 'and' operator for precision
 export const fullWordsSearchInElastic = async (q: string): Promise<any> => {
     return await elasticClient.search({
         index: INDEX_NAME,
@@ -28,7 +28,7 @@ export const fullWordsSearchInElastic = async (q: string): Promise<any> => {
     });
 };
 
-// 3. ביטוי מלא (Phrase) - בכל השדות
+// Exact phrase search on keyword fields and IDs
 export const phraseSearchInElastic = async (q: string): Promise<any> => {
     return await elasticClient.search({
         index: INDEX_NAME,
@@ -38,8 +38,6 @@ export const phraseSearchInElastic = async (q: string): Promise<any> => {
                     {
                         multi_match: {
                             query: q,
-                            // Search across all text fields (using .keyword for exact phrase matching) 
-                            // and all numeric fields starting with 'ID' to ensure full-value matches only.
                             fields: ['*.keyword', 'ID*'],
                             type: 'phrase'
                         }

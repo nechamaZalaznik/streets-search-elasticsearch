@@ -10,6 +10,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ onDelete }) => {
     <button 
       className={styles.deleteButton}
       onClick={onDelete}
+      title="מחק רשומה" 
     >
       מחק
     </button>
