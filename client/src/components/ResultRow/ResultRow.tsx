@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import DeleteButton from '../DeleteButton/DeleteButton';
 import type { Street } from '../../types/street';
 import styles from './ResultRow.module.scss';
@@ -8,8 +8,7 @@ interface ResultRowProps {
   onDeleteRow: (id: string) => void;
 }
 
-const ResultRow: React.FC<ResultRowProps> = ({ street, onDeleteRow }) => {
-  return (
+const ResultRow: React.FC<ResultRowProps> = memo(({ street, onDeleteRow }) => {  return (
     <tr className={styles.row}>
       <td>{street.street_name}</td>
       <td>{street.secondary_name}</td>
@@ -23,6 +22,6 @@ const ResultRow: React.FC<ResultRowProps> = ({ street, onDeleteRow }) => {
       </td>
     </tr>
   );
-};
+});
 
 export default ResultRow;

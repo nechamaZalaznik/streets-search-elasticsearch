@@ -3,6 +3,7 @@ import styles from './ResultsTable.module.scss';
 import { useSearch } from '../../context/SearchContext';
 import { deleteStreet } from '../../services/api';
 import ResultRow from '../ResultRow/ResultRow';
+import { toast } from 'react-toastify';
 
 const ResultsTable: React.FC = () => {
   const { results, setResults } = useSearch();
@@ -14,7 +15,7 @@ const ResultsTable: React.FC = () => {
       await deleteStreet(id); 
       setResults(results.filter(s => s.id !== id)); 
     } catch (error) {
-      alert("המחיקה נכשלה");
+      toast.error("המחיקה נכשלה");
     }
   };
 

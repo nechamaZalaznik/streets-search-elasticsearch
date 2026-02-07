@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSearch } from '../../context/SearchContext';
 import { searchStreets } from '../../services/api';
 import styles from './SearchButton.module.scss';
+import { toast } from 'react-toastify';
 
 const SearchButton: React.FC = () => {
   const { searchQuery, searchMode, setResults } = useSearch();
@@ -15,7 +16,7 @@ const SearchButton: React.FC = () => {
       const data = await searchStreets(searchQuery, searchMode);
       setResults(data);
     } catch (error) {
-      alert("שגיאה בחיבור לשרת");
+      toast.error("שגיאה בחיבור לשרת");
       console.error(error);
     } finally {
       setLoading(false);

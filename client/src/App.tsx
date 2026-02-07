@@ -6,6 +6,7 @@ import SearchFilters from './components/SearchFilters/SearchFilters';
 import { SearchProvider } from './context/SearchContext';
 import './App.css'; 
 import styles from './App.module.scss';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           </section>
         </main>
       </div>
+      <ToastContainer position="bottom-left" autoClose={3000} />
     </SearchProvider>
   );
 }
