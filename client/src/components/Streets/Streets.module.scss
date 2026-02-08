@@ -1,0 +1,121 @@
+@use '../../_variables' as var;
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto; 
+  margin-top: 20px;
+  direction: rtl;
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse; 
+  background-color: var.$white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+
+  thead {
+    background-color: var.$primary-blue; 
+    border-bottom: 2px solid var.$hover-blue;
+
+    th {
+      padding: 15px 25px; 
+      text-align: right; 
+      font-weight: 600;
+      color: var.$white; 
+      font-size: 14px;
+      white-space: nowrap;
+      letter-spacing: 0.5px; 
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(var.$primary-blue, 0.02);
+      }
+
+      td {
+        padding: 12px 25px;
+        color: #444;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.confirmContainer {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 260px;
+  direction: rtl;
+  font-family: inherit;
+}
+
+.confirmMessage {
+  font-size: 15px;
+  color: #2c3e50;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.deleteBtn {
+  background-color: #e74c3c;
+  color: var.$white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cancelBtn {
+  background-color: #f8f9fa;
+  color: #7f8c8d;
+  border: 1px solid #ddd;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e9ecef;
+    color: #2c3e50;
+    border-color: #ccc;
+  }
+}
+
+.statusMessage {
+  text-align: center;
+  padding: 40px;
+  color: #7f8c8d;
+  font-size: 16px;
+  background: var.$white;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}

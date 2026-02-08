@@ -1,18 +1,19 @@
 import React from 'react';
-import Streets from './components/ResultsTable/Streets';
+import Streets from './components/Streets/Streets';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchButton from './components/SearchButton/SearchButton';
 import SearchFilters from './components/SearchFilters/SearchFilters';
 import { SearchProvider } from './context/SearchContext';
 import styles from './App.module.scss';
 import { ToastContainer } from 'react-toastify';
+import { UI_MESSAGES } from './constants/messages';
 
 function App() {
   return (
     <SearchProvider>
       <div className={styles.appContainer}>
         <header className={styles.header}>
-          <h1>מערכת ניהול רחובות</h1>
+          <h1>{UI_MESSAGES.TITLES.MAIN_SYSTEM}</h1>
         </header>
 
         <main className={styles.mainContent}>

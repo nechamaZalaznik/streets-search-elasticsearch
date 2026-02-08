@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SearchMode, type SearchModeType } from '../types/SearchType';
 import type { Street } from '../types/street';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const MODE_TO_ROUTE: Record<SearchModeType, string> = {
   [SearchMode.FREE]: 'search/free',

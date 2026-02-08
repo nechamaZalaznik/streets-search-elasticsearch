@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { STREET_TABLE_COLUMNS } from '../../constants/tableConfig';
 import type { Street } from '../../types/street';
 import DeleteButton from '../DeleteButton/DeleteButton';
-import styles from './ResultRow.module.scss';
+import styles from './StreetItem.module.scss';
 
 interface StreetItemProps {
   street: Street;
