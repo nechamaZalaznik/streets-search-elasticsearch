@@ -14,7 +14,7 @@ export const searchStreets = async (query: string, mode: SearchModeType): Promis
   const endpoint = MODE_TO_ROUTE[mode];
 
   const response = await axios.get(`${API_BASE_URL}/${endpoint}`, {
-    params: { q: query }
+    params:  { searchText: query  }
   });
   
   return response.data;

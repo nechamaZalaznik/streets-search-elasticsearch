@@ -3,18 +3,21 @@ import type { Request, Response } from 'express';
 import { searchService } from '../services/index.js';
 import type { Street } from '../types/street.js';
 export class SearchController {
-  
 
-private formatResults(result: estypes.SearchResponse<Street>): Street[] {
-  return result.hits.hits.map((hit) => ({
-    ...(hit._source as Street),
-    id: hit._id as string,
-  }));
-}
+
+  private formatResults(result: estypes.SearchResponse<Street>): Street[] {
+    return result.hits.hits.map((hit) => ({
+      ...(hit._source as Street),
+      id: hit._id as string,
+    }));
+  }
 
   freeSearch = async (req: Request, res: Response) => {
     try {
-      const searchText= (req.query.searchText as string) || '';
+      const searchText = (req.query.searchText as string) || '';
+      if (!searchText.trim()) {
+        return res.json([]);
+      }
       const result = await searchService.freeSearchInElastic(searchText);
       res.json(this.formatResults(result));
     } catch (error) {
@@ -24,7 +27,10 @@ private formatResults(result: estypes.SearchResponse<Street>): Street[] {
 
   fullWordsSearch = async (req: Request, res: Response) => {
     try {
-      const searchText= (req.query.searchText as string) || '';
+      const searchText = (req.query.searchText as string) || '';
+      if (!searchText.trim()) {
+        return res.json([]);
+      }
       const result = await searchService.fullWordsSearchInElastic(searchText);
       res.json(this.formatResults(result));
     } catch (error) {
@@ -32,10 +38,13 @@ private formatResults(result: estypes.SearchResponse<Street>): Street[] {
     }
   };
 
- 
+
   phraseSearch = async (req: Request, res: Response) => {
     try {
-      const searchText= (req.query.searchText as string) || '';
+      const searchText = (req.query.searchText as string) || '';
+      if (!searchText.trim()) {
+        return res.json([]);
+      }
       const result = await searchService.phraseSearchInElastic(searchText);
       res.json(this.formatResults(result));
     } catch (error) {
