@@ -7,7 +7,8 @@
   "scripts": {
     "start": "ts-node-esm src/index.ts",
     "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
-    "ingest": "ts-node-esm src/scripts/ingest.ts"
+    "ingest": "ts-node-esm src/scripts/ingest.ts",
+    "seed": "node --loader ts-node/esm --no-warnings scripts/seed-streets.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
     "@types/node": "^25.2.0",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

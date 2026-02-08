@@ -1,15 +1,18 @@
+import type { estypes } from '@elastic/elasticsearch';
 import { elasticClient } from '../clients/elasticsearch.js';
+import { config } from '../config/index.js';
+import type { Street } from '../types/street.js';
 
 export class SearchService {
-  private readonly INDEX_NAME = 'beersheba_streets';
+  private readonly INDEX_NAME = config.elastic.index;
 
 
-  async freeSearchInElastic(q: string): Promise<any> {
-    return await elasticClient.search({
+  async freeSearchInElastic(searchText: string): Promise<estypes.SearchResponse<Street>> {
+    return await elasticClient.search<Street>({
       index: this.INDEX_NAME,
       query: {
         bool: {
-          must: [{ wildcard: { street_name: { value: `*${q}*` } } }],
+          must: [{ wildcard: { street_name: { value: `*${searchText}*` } } }],
           filter: [{ term: { is_active: true } }]
         }
       }
@@ -17,12 +20,12 @@ export class SearchService {
   }
 
 
-  async fullWordsSearchInElastic(q: string): Promise<any> {
-    return await elasticClient.search({
+  async fullWordsSearchInElastic(searchText: string): Promise<estypes.SearchResponse<Street>> {
+    return await elasticClient.search<Street>({
       index: this.INDEX_NAME,
       query: {
         bool: {
-          must: [{ multi_match: { query: q, fields: ['*'], operator: 'and' } }],
+          must: [{ multi_match: { query: searchText, fields: ['*'], operator: 'and' } }],
           filter: [{ term: { is_active: true } }]
         }
       }
@@ -30,15 +33,15 @@ export class SearchService {
   }
 
 
-  async phraseSearchInElastic(q: string): Promise<any> {
-    return await elasticClient.search({
+  async phraseSearchInElastic(searchText: string): Promise<estypes.SearchResponse<Street>> {
+    return await elasticClient.search<Street>({
       index: this.INDEX_NAME,
       query: {
         bool: {
           must: [
             {
               multi_match: {
-                query: q,
+                query: searchText,
                 fields: ['*.keyword', 'ID*'],
                 type: 'phrase'
               }

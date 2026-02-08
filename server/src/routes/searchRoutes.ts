@@ -7,4 +7,4 @@ router.get('/free', searchController.freeSearch);
 router.get('/words', searchController.fullWordsSearch);
 router.get('/phrase', searchController.phraseSearch);
 
-export const streetRouter = router;
+export const searchRouter = router;
