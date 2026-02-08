@@ -1,29 +1,29 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
-import type { SearchMode } from '../types';
+import { SearchMode, type SearchModeType } from '../types/SearchType';
 import type { Street } from '../types/street';
 
-/**
- * Defines the shape of the search state shared across the application.
- */
+
 interface SearchContextType {
-  searchMode: SearchMode;
-  setSearchMode: (mode: SearchMode) => void;
+  searchMode: SearchModeType;
+  setSearchMode: (mode: SearchModeType) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  results: Street[];                 
-  setResults: (results: Street[]) => void; 
+  results: Street[];
+  setResults: (results: Street[]) => void;
+  isLoading: boolean; 
+  setIsLoading: (loading: boolean) => void;
+  isInitialState: boolean;
+  setIsInitialState: (isInitial: boolean) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
-/**
- * Global provider that wraps the app to provide search-related state.
- * Manages the current search strategy, input value, and the data fetched from the API.
- */
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [searchMode, setSearchMode] = useState<SearchMode>('FREE');
+  const [searchMode, setSearchMode] = useState<SearchModeType>(SearchMode.FREE);
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<Street[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialState, setIsInitialState] = useState(true);
 
   return (
     <SearchContext.Provider value={{ 
@@ -32,17 +32,17 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         searchQuery, 
         setSearchQuery,
         results,      
-        setResults    
+        setResults,
+        isLoading,
+        setIsLoading,
+        isInitialState,
+        setIsInitialState
     }}>
       {children}
     </SearchContext.Provider>
   );
 };
 
-/**
- * Custom hook for accessing search context.
- * Includes a safety check to ensure it's used within a SearchProvider.
- */
 export const useSearch = () => {
   const context = useContext(SearchContext);
   if (!context) {

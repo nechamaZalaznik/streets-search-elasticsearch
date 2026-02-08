@@ -4,7 +4,6 @@ import SearchBar from './components/SearchBar/SearchBar';
 import SearchButton from './components/SearchButton/SearchButton';
 import SearchFilters from './components/SearchFilters/SearchFilters';
 import { SearchProvider } from './context/SearchContext';
-import './App.css'; 
 import styles from './App.module.scss';
 import { ToastContainer } from 'react-toastify';
 

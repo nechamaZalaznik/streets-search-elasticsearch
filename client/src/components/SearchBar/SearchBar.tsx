@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './SearchBar.module.scss';
 import { useSearch } from '../../context/SearchContext';
-import { SEARCH_OPTIONS } from '../../types';
+import { SEARCH_OPTIONS } from '../../constants/searchOptions';
 
 const SearchBar: React.FC = () => {
   const { searchMode, searchQuery, setSearchQuery } = useSearch();
+  
   const currentOption = SEARCH_OPTIONS.find(option => option.id === searchMode);
 
   return (

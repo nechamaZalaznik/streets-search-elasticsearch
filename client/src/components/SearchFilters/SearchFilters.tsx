@@ -1,8 +1,7 @@
 import React from 'react';
-
-import styles from './SearchFilters.module.scss';
-import { SEARCH_OPTIONS, type SearchMode } from '../../types';
+import { SEARCH_OPTIONS } from '../../constants/searchOptions';
 import { useSearch } from '../../context/SearchContext';
+import styles from './SearchFilters.module.scss';
 
 const SearchFilters: React.FC = () => {
   const { searchMode, setSearchMode } = useSearch();
@@ -17,7 +16,7 @@ const SearchFilters: React.FC = () => {
             className={styles.radioInput}
             value={option.id}
             checked={searchMode === option.id}
-            onChange={() => setSearchMode(option.id as SearchMode)}
+            onChange={() => setSearchMode(option.id)}
           />
           <span className={styles.labelText}>{option.label}</span>
         </label>

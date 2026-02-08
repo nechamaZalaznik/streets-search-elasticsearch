@@ -10,15 +10,19 @@
     text-align: right;
     vertical-align: middle;
     white-space: nowrap; 
-    color: #333;         
+    color: #333;          
     font-size: 14px;
   }
 
   .deleteCell {
-    padding: 0;         
-    width: 60px;        
+    padding: 8px; 
+    width: 80px;  
+    text-align: center; 
     background-color: transparent; 
     border-right: 1px solid var.$border-color; 
+    
+    display: table-cell; 
+    vertical-align: middle;
   }
 
   &:hover {

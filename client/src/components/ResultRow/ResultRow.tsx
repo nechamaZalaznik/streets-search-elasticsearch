@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import DeleteButton from '../DeleteButton/DeleteButton';
+import { STREET_TABLE_COLUMNS } from '../../constants/tableConfig';
 import type { Street } from '../../types/street';
+import DeleteButton from '../DeleteButton/DeleteButton';
 import styles from './ResultRow.module.scss';
 
 interface ResultRowProps {
@@ -8,18 +9,26 @@ interface ResultRowProps {
   onDeleteRow: (id: string) => void;
 }
 
-const ResultRow: React.FC<ResultRowProps> = memo(({ street, onDeleteRow }) => {  return (
+const ResultRow: React.FC<ResultRowProps> = memo(({ street, onDeleteRow }) => {
+  return (
     <tr className={styles.row}>
-      <td>{street.street_name}</td>
-      <td>{street.secondary_name}</td>
-      <td>{street.title}</td>
-      <td>{street.neighborhood}</td>
-      <td>{street.street_type}</td>
-      <td>{street.ID_street}</td>
-      
-      <td className={styles.deleteCell}>
-        <DeleteButton onDelete={() => onDeleteRow(street.id)} />
-      </td>
+      {STREET_TABLE_COLUMNS.map((col) => {
+        if (col.key === 'actions') {
+          return (
+            <td key={col.key} className={styles.deleteCell}>
+              <DeleteButton onDelete={() => onDeleteRow(street.id)} />
+            </td>
+          );
+        }
+
+        const cellValue = street[col.key as keyof Street];
+
+        return (
+          <td key={col.key}>
+            {cellValue !== undefined && cellValue !== null ? String(cellValue) : '-'}
+          </td>
+        );
+      })}
     </tr>
   );
 });
