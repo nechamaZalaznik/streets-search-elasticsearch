@@ -1,5 +1,5 @@
 import React from 'react';
-import ResultsTable from './components/ResultsTable/ResultsTable';
+import Streets from './components/ResultsTable/Streets';
 import SearchBar from './components/SearchBar/SearchBar';
 import SearchButton from './components/SearchButton/SearchButton';
 import SearchFilters from './components/SearchFilters/SearchFilters';
@@ -25,7 +25,7 @@ function App() {
           </section>
 
           <section className={styles.resultsSection}>
-            <ResultsTable />
+            <Streets />
           </section>
         </main>
       </div>

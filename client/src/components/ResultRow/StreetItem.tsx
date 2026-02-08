@@ -4,12 +4,12 @@ import type { Street } from '../../types/street';
 import DeleteButton from '../DeleteButton/DeleteButton';
 import styles from './ResultRow.module.scss';
 
-interface ResultRowProps {
+interface StreetItemProps {
   street: Street;
   onDeleteRow: (id: string) => void;
 }
 
-const ResultRow: React.FC<ResultRowProps> = memo(({ street, onDeleteRow }) => {
+const StreetItem: React.FC<StreetItemProps> = memo(({ street, onDeleteRow }) => {
   return (
     <tr className={styles.row}>
       {STREET_TABLE_COLUMNS.map((col) => {
@@ -33,4 +33,4 @@ const ResultRow: React.FC<ResultRowProps> = memo(({ street, onDeleteRow }) => {
   );
 });
 
-export default ResultRow;
+export default StreetItem;

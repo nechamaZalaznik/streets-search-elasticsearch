@@ -4,10 +4,10 @@ import { UI_MESSAGES } from '../../constants/messages';
 import { STREET_TABLE_COLUMNS } from '../../constants/tableConfig';
 import { useSearch } from '../../context/SearchContext';
 import { deleteStreet } from '../../services/api';
-import ResultRow from '../ResultRow/ResultRow';
+import StreetItem from '../ResultRow/StreetItem';
 import styles from './ResultsTable.module.scss';
 
-const ResultsTable: React.FC = () => {
+const Streets: React.FC = () => {
   const { results, setResults, isLoading, isInitialState } = useSearch();
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -55,7 +55,7 @@ const ResultsTable: React.FC = () => {
 </thead>
         <tbody>
           {results.map((street) => (
-            <ResultRow 
+            <StreetItem 
               key={street.id} 
               street={street} 
               onDeleteRow={handleDelete} 
@@ -67,4 +67,4 @@ const ResultsTable: React.FC = () => {
   );
 };
 
-export default ResultsTable;
+export default Streets;
